@@ -1,0 +1,84 @@
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+
+namespace com.faistdevelopments.AbstractEfCore;
+
+public class Database : DbContext
+{
+    protected string ConnectionString { get; set; }
+
+    private List<Type> EntityTypes = new List<Type>();
+
+    protected Assembly? AssemblyOfProject;
+
+    public Database(string connectionString)
+    {
+        this.ConnectionString = connectionString;
+        this.AssemblyOfProject = Assembly.GetCallingAssembly();
+    }
+
+    public Database() : this("localhost")
+    {
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseMySQL(this.ConnectionString);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Register also the entities from the Lib
+        this.RegisterEntites();
+
+        foreach (Type type in this.EntityTypes)
+        {
+            modelBuilder.Entity(type);
+        }
+
+        // Dispose of EntityTypes to clear memory
+        this.EntityTypes.Clear();
+    }
+
+    /// <summary>
+    /// Needs to be called from constructor of project
+    /// </summary>
+    protected void RegisterEntites()
+    {
+        Assembly assemblyOfLib = Assembly.GetExecutingAssembly();
+
+        PrepareEntityTypes(assemblyOfLib);
+        if (AssemblyOfProject != null)
+        {
+            PrepareEntityTypes(AssemblyOfProject);
+        }
+    }
+
+    private void PrepareEntityTypes(Assembly assembly)
+    {
+        foreach (Type type in assembly.GetTypes()
+                                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(AbstractEntity))))
+        {
+            this.EntityTypes.Add(type);
+        }
+    }
+
+    public new void Add<T>(T entity) where T : AbstractEntity
+    {
+        this.GetSet<T>(entity.GetType()).Add(entity);
+    }
+
+    public DbSet<T> GetSet<T>(Type type) where T : AbstractEntity
+    {
+        return base.Set<T>(type.ToString());
+    }
+
+    public override int SaveChanges()
+    {
+        int entitesWritten = base.SaveChanges();
+        return entitesWritten;
+    }
+}
