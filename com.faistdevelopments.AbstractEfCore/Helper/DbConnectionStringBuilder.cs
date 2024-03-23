@@ -1,5 +1,8 @@
 ﻿namespace com.faistdevelopments.AbstractEfCore;
 
+/// <summary>
+/// Base class for connection string builders
+/// </summary>
 public abstract class DbConnectionStringBuilder
 {
     protected string? Hostname;

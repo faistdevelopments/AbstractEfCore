@@ -1,5 +1,8 @@
 ﻿namespace com.faistdevelopments.AbstractEfCore;
 
+/// <summary>
+/// Build the connection string for MySql databases
+/// </summary>
 public class MySqlConnectionStringBuilder : DbConnectionStringBuilder
 {
     public static MySqlConnectionStringBuilder Create()
