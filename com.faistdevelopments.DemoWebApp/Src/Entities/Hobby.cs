@@ -12,6 +12,8 @@ public class Hobby : BaseEntity<Hobby>
 
     public string Name { get; set; }
 
+    public virtual List<User> Users { get; set; } = new List<User>();
+
     public Hobby() { }
 
     public Hobby(string name)

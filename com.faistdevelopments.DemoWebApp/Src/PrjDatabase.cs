@@ -8,7 +8,7 @@ public class PrjDatabase : MySqlDatabase
         .SetHostname("localhost") //
         .SetUsername("root") //
         .SetPassword("12345678") //
-        .SetDatabaseName("DeepOceanTest") //
+        .SetDatabaseName("AbstractEfCore") //
         .Build();
 
     public PrjDatabase() : base(CONNECTION_STRING)
