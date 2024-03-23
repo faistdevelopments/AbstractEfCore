@@ -1,0 +1,6 @@
+@com.faistdevelopments.DemoWebApp_HostAddress = http://localhost:5034
+
+GET {{com.faistdevelopments.DemoWebApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
