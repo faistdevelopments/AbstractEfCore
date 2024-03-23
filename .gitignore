@@ -1,2 +1,7 @@
 AbstractEfCore/obj
 AbstractEfCore/bin
+com.faistdevelopments.DemoWebApp/bin
+com.faistdevelopments.DemoWebApp/obj
+.DS_Store
+com.faistdevelopments.AbstractEfCore/bin
+com.faistdevelopments.AbstractEfCore/obj

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace com.faistdevelopments.AbstractEfCore;
 
-public class Database : DbContext
+public abstract class AbstractDatabase : DbContext
 {
     protected string ConnectionString { get; set; }
 
@@ -11,21 +11,19 @@ public class Database : DbContext
 
     protected Assembly? AssemblyOfProject;
 
-    public Database(string connectionString)
+    public AbstractDatabase(string connectionString, Assembly assemblyOfProject)
     {
         this.ConnectionString = connectionString;
-        this.AssemblyOfProject = Assembly.GetCallingAssembly();
-    }
-
-    public Database() : this("localhost")
-    {
+        this.AssemblyOfProject = assemblyOfProject;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseMySQL(this.ConnectionString);
+        OnSpecificConfiguring(optionsBuilder);
     }
+
+    protected abstract void OnSpecificConfiguring(DbContextOptionsBuilder optionsBuilder);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
