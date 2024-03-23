@@ -32,4 +32,14 @@ public class PrjController : ControllerBase
             db.SaveChanges(); // Commit the changes
         }
     }
+
+    [HttpPost]
+    [Route("GetUserByUsername")]
+    public List<User> GetUserByUsername(string username)
+    {
+        using (PrjDatabase db = new PrjDatabase())
+        {
+            return com.faistdevelopments.DemoWebApp.User.FetchByLinq(db, u => u.Username.Equals(username));
+        }
+    }
 }

@@ -32,5 +32,17 @@ public abstract class BaseEntity<T> : AbstractEntity where T : AbstractEntity
 
         return baseEntity as T;
     }
+
+    /// <summary>
+    /// Fetch entities by specific linq condition
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="linq"></param>
+    /// <returns></returns>
+    public static List<T> FetchByLinq(AbstractDatabase db, Func<T, bool> linq)
+    {
+        DbSet<T> set = GetSet(db);
+        return set.Where(linq).ToList();
+    }
 }
 
